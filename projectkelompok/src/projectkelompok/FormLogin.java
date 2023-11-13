@@ -130,11 +130,11 @@ public class FormLogin extends javax.swing.JFrame {
 
             if (rs.next()) {
                 if (rs.getString("level").equals("admin")) {
-                    FormData fd = new FormData();
+                    Dahboard fd = new Dahboard();
                     fd.show();
                     this.dispose();
                 } else if (rs.getString("level").equals("petugas")) {
-                    FormTanggapan fp = new FormTanggapan();
+                    Dahboard fp = new Dahboard();
                     fp.show();
                     this.dispose();
                 } else if (rs.getString("level").equals("masyarakat")) {

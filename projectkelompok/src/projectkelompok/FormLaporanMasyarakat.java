@@ -21,6 +21,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.imageio.ImageIO;
 
 
@@ -76,6 +77,7 @@ public Statement st;
         tgl = new com.toedter.calendar.JDateChooser();
         foto = new javax.swing.JFileChooser();
         jLabel7 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -99,6 +101,18 @@ public Statement st;
         jLabel6.setFont(new java.awt.Font("Segoe UI Black", 3, 14)); // NOI18N
         jLabel6.setText("Foto Bukti");
 
+        txnama.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txnamaActionPerformed(evt);
+            }
+        });
+
+        txtlp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtlpActionPerformed(evt);
+            }
+        });
+
         txtisilaporan.setColumns(20);
         txtisilaporan.setRows(5);
         jScrollPane1.setViewportView(txtisilaporan);
@@ -117,6 +131,13 @@ public Statement st;
             }
         });
 
+        jButton1.setText("Logout");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -126,37 +147,42 @@ public Statement st;
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(43, 43, 43)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addGap(59, 59, 59))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(45, 45, 45)))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txnama)
-                                    .addComponent(txtlp)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel4))
-                                .addGap(21, 21, 21)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1)
-                                    .addComponent(tgl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addGap(82, 82, 82)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(6, 6, 6)
                                         .addComponent(btnsubmit)
+                                        .addGap(60, 60, 60)
+                                        .addComponent(jButton1)
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(foto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE))))))
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jLabel2)
+                                                .addGap(59, 59, 59))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jLabel3)
+                                                .addGap(45, 45, 45)))
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txnama, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
+                                            .addComponent(txtlp)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel6)
+                                            .addComponent(jLabel5)
+                                            .addComponent(jLabel4))
+                                        .addGap(21, 21, 21)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(tgl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 567, Short.MAX_VALUE))))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel1)
@@ -198,7 +224,9 @@ public Statement st;
                                 .addGap(12, 12, 12)
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnsubmit)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnsubmit)
+                            .addComponent(jButton1))
                         .addContainerGap())))
         );
 
@@ -238,37 +266,72 @@ JFileChooser fileChooser = new JFileChooser();
     }//GEN-LAST:event_fotoActionPerformed
 
     private void btnsubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsubmitActionPerformed
-try {
-            st = cn.createStatement();
+        try {
+        st = cn.createStatement();
 
-            // Pastikan Anda mengganti 'nama_kolom' dengan nama kolom yang sesuai dalam tabel 'pengaduan'
-            String sql = "INSERT INTO pengaduan (nama, tgl_pengaduan, telp, isi_laporan, foto) VALUES('"
-                + txnama.getText() + "','"
-                + txtlp.getText() + "','"
-                + new SimpleDateFormat("yyyy-MM-dd").format(tgl.getDate()) + "','"
-                + txtisilaporan.getText() + "', ?)"; // Gunakan tanda tanya (?) sebagai placeholder untuk gambar
-
-            // Melakukan PreparedStatement untuk mengganti placeholder dengan data gambar
-            PreparedStatement ps = cn.prepareStatement(sql);
-            if (imagePath != null) {
-                BufferedImage image = ImageIO.read(new File(imagePath));
-                byte[] imageBytes = imageToByteArray(image);
-                ps.setBytes(1, imageBytes); // Menggantikan tanda tanya (?) dengan gambar
-            } else {
-                ps.setNull(1, java.sql.Types.BLOB); // Menggantikan tanda tanya (?) dengan null jika tidak ada gambar
-            }
-
-            ps.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Simpan Berhasil");
-            txnama.setText("");
-            txtlp.setText("");
-            tgl.setDate(null);
-            txtisilaporan.setText("");
-        } catch (Exception e) {
-            e.printStackTrace();
+        String nama = txnama.getText();
+        String telp = txtlp.getText();
+        // Mengambil tanggal dari JDateChooser
+        Date selectedDate = tgl.getDate();
+        if (selectedDate == null) {
+            // Tampilkan pesan kesalahan bahwa tanggal tidak valid
+            JOptionPane.showMessageDialog(null, "Tanggal tidak valid. Harap pilih tanggal yang benar.");
+            return;
         }
+        // Mengonversi tanggal ke format "YYYY-MM-DD"
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = dateFormat.format(selectedDate);
+        String isiLaporan = txtisilaporan.getText();
+
+        // Mengambil gambar yang dipilih menggunakan JFileChooser
+        byte[] imageBytes = null;
+        if (imagePath != null) {
+            BufferedImage image = ImageIO.read(new File(imagePath));
+            imageBytes = imageToByteArray(image);
+        }
+
+        // Pastikan Anda mengganti 'nama_kolom' dengan nama kolom yang sesuai dalam tabel 'pengaduan'
+        String sql = "INSERT INTO pengaduan (nama, tgl_pengaduan, telp, isi_laporan, foto) VALUES('"
+                + nama + "','"
+                + telp + "','"
+                + formattedDate + "','"
+                + isiLaporan + "', ?)";
+
+        // Melakukan PreparedStatement untuk mengganti placeholder dengan data gambar
+        PreparedStatement ps = cn.prepareStatement(sql);
+        if (imageBytes != null) {
+            ps.setBytes(1, imageBytes); // Menggantikan tanda tanya (?) dengan gambar
+        } else {
+            ps.setNull(1, java.sql.Types.BLOB); // Menggantikan tanda tanya (?) dengan null jika tidak ada gambar
+        }
+
+        ps.executeUpdate();
+        JOptionPane.showMessageDialog(null, "Simpan Berhasil");
+        txnama.setText("");
+        txtlp.setText("");
+        tgl.setDate(null);
+        txtisilaporan.setText("");
+        jLabel7.setIcon(null);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
         // TODO add your handling code here:
     }//GEN-LAST:event_btnsubmitActionPerformed
+
+    private void txtlpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtlpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtlpActionPerformed
+
+    private void txnamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txnamaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txnamaActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        FormLogin l = new FormLogin();
+        l.show();
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 private byte[] imageToByteArray(BufferedImage image) {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -319,6 +382,7 @@ private byte[] imageToByteArray(BufferedImage image) {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnsubmit;
     private javax.swing.JFileChooser foto;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

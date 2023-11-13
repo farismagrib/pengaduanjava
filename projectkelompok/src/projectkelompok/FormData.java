@@ -33,6 +33,7 @@ public class FormData extends javax.swing.JFrame {
         initComponents();
          judul();
         tampilData("");
+        tbllaporandata.getColumnModel().getColumn(4).setCellRenderer(new ImageRenderer()); 
     }
 
     /**
@@ -49,6 +50,8 @@ public class FormData extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tbllaporandata = new javax.swing.JTable();
         btntanggapan = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -59,13 +62,13 @@ public class FormData extends javax.swing.JFrame {
 
         tbllaporandata.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Nama", "Telepon", "Tanggal", "Isi Laporan", "Foto Bukti", "Status"
+                "Nama", "Telepon", "Tanggal", "Isi Laporan", "Foto"
             }
         ));
         tbllaporandata.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -83,27 +86,51 @@ public class FormData extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Logout");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Dashboard");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(31, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(91, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btntanggapan)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 672, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(30, 30, 30))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addGap(253, 253, 253)))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btntanggapan)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(175, 175, 175)
+                                .addComponent(jLabel1)
+                                .addGap(73, 73, 73)
+                                .addComponent(jButton2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton1)))
+                        .addGap(31, 31, 31))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 672, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(86, 86, 86))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton1)
+                        .addComponent(jButton2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
@@ -127,10 +154,24 @@ public class FormData extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        Dahboard l = new Dahboard();
+        l.show();
+        this.dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        FormLogin l = new FormLogin();
+        l.show();
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     private void btntanggapanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntanggapanActionPerformed
-    FormTanggapan fl= new FormTanggapan();
+        FormTanggapan fl= new FormTanggapan();
         fl.show();
-        this.dispose(); 
+        this.dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_btntanggapanActionPerformed
 
@@ -176,71 +217,94 @@ public class FormData extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btntanggapan;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tbllaporandata;
     // End of variables declaration//GEN-END:variables
- public void judul() {
+public void judul() {
         Object[] judul = {
-            "Nama", "Telp", "Tanggal", "Isi Laporan", "Foto Bukti"
+            "Nama", "Telp", "Tanggal", "Isi Laporan", "Foto"
         };
-       tabModel = new DefaultTableModel(null, judul);
-       tbllaporandata.setModel(tabModel);
-        
+        tabModel = new DefaultTableModel(null, judul);
+        tbllaporandata.setModel(tabModel);
     }
-public void tampilData(String where) {
- try {
+
+    public void tampilData(String where) {
+        try {
             st = cn.createStatement();
             tabModel.getDataVector().removeAllElements();
             tabModel.fireTableDataChanged();
             rs = st.executeQuery("SELECT * FROM pengaduan " + where);
 
             while (rs.next()) {
+                ImageIcon imageIcon = null;
+                byte[] imageBytes = rs.getBytes("foto");
+                if (imageBytes != null) {
+                    imageIcon = new ImageIcon(imageBytes);
+                } else {
+                    // Jika data gambar null, Anda bisa menggunakan gambar default
+                    // Gantilah path di bawah sesuai dengan path gambar default Anda
+                    imageIcon = new ImageIcon("default.jpg");
+                }
+
                 Object[] data = {
                     rs.getString("nama"),
-                    rs.getString("tgl_pengaduan"),
                     rs.getString("telp"),
+                    rs.getString("tgl_pengaduan"),
                     rs.getString("isi_laporan"),
-                    // Menambahkan komponen JLabel untuk menampilkan gambar
-                    (rs.getBytes("foto") != null) ? new JLabel(resizeImage(rs.getBytes("foto"), 150, 150)) : null,
+                    imageIcon,
                 };
                 tabModel.addRow(data);
-            
-DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-renderer.setHorizontalAlignment(JLabel.CENTER);
 
-// Ganti columnIndex dengan indeks kolom yang berisi gambar
-int columnIndex = 4; // Misalnya, indeks kolom foto adalah 4 (mulai dari 0)
+                DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+                renderer.setHorizontalAlignment(JLabel.CENTER);
 
-tbllaporandata.getColumnModel().getColumn(columnIndex).setCellRenderer(renderer);
-
+                int columnIndex = 4;
+                tbllaporandata.getColumnModel().getColumn(columnIndex).setCellRenderer(renderer);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
     }
-}
-private ImageIcon resizeImage(byte[] imageBytes, int width, int height) {
+    
+    
+
+    private ImageIcon resizeImage(byte[] imageBytes, int width, int height) {
+    if (imageBytes == null) {
+        // Mengembalikan gambar default jika imageBytes adalah null
+        // Gantilah ini dengan gambar default sesuai kebutuhan Anda
+        return new ImageIcon("default.jpg");
+    }
+
     try {
         BufferedImage originalImage = ImageIO.read(new ByteArrayInputStream(imageBytes));
-        Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        return new ImageIcon(scaledImage);
-    } catch (IOException e) {
-        e.printStackTrace();
-        return null;
-    }
-}
-private BufferedImage getImageFromBytes(byte[] imageData) {
-    try {
-        if (imageData != null && imageData.length > 0) {
-            return ImageIO.read(new ByteArrayInputStream(imageData));
+
+        if (originalImage != null) {
+            Image scaledImage = originalImage.getScaledInstance(300, 300, Image.SCALE_SMOOTH); // Ganti ukuran yang Anda inginkan di sini
+            return new ImageIcon(scaledImage);
+        } else {
+            // Mengembalikan gambar default jika originalImage adalah null
+            // Gantilah ini dengan gambar default sesuai kebutuhan Anda
+            return new ImageIcon("default.jpg");
         }
     } catch (IOException e) {
         e.printStackTrace();
+        return new ImageIcon("default.jpg"); // Gantilah ini dengan gambar default sesuai kebutuhan Anda
     }
-    return null;
-}
+    }
 
-
+    private BufferedImage getImageFromBytes(byte[] imageData) {
+        try {
+            if (imageData != null && imageData.length > 0) {
+                return ImageIO.read(new ByteArrayInputStream(imageData));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
 
