@@ -266,55 +266,64 @@ JFileChooser fileChooser = new JFileChooser();
     }//GEN-LAST:event_fotoActionPerformed
 
     private void btnsubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsubmitActionPerformed
-        try {
-        st = cn.createStatement();
+       try {
+    st = cn.createStatement();
 
-        String nama = txnama.getText();
-        String telp = txtlp.getText();
-        // Mengambil tanggal dari JDateChooser
-        Date selectedDate = tgl.getDate();
-        if (selectedDate == null) {
-            // Tampilkan pesan kesalahan bahwa tanggal tidak valid
-            JOptionPane.showMessageDialog(null, "Tanggal tidak valid. Harap pilih tanggal yang benar.");
-            return;
-        }
-        // Mengonversi tanggal ke format "YYYY-MM-DD"
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String formattedDate = dateFormat.format(selectedDate);
-        String isiLaporan = txtisilaporan.getText();
-
-        // Mengambil gambar yang dipilih menggunakan JFileChooser
-        byte[] imageBytes = null;
-        if (imagePath != null) {
-            BufferedImage image = ImageIO.read(new File(imagePath));
-            imageBytes = imageToByteArray(image);
-        }
-
-        // Pastikan Anda mengganti 'nama_kolom' dengan nama kolom yang sesuai dalam tabel 'pengaduan'
-        String sql = "INSERT INTO pengaduan (nama, tgl_pengaduan, telp, isi_laporan, foto) VALUES('"
-                + nama + "','"
-                + telp + "','"
-                + formattedDate + "','"
-                + isiLaporan + "', ?)";
-
-        // Melakukan PreparedStatement untuk mengganti placeholder dengan data gambar
-        PreparedStatement ps = cn.prepareStatement(sql);
-        if (imageBytes != null) {
-            ps.setBytes(1, imageBytes); // Menggantikan tanda tanya (?) dengan gambar
-        } else {
-            ps.setNull(1, java.sql.Types.BLOB); // Menggantikan tanda tanya (?) dengan null jika tidak ada gambar
-        }
-
-        ps.executeUpdate();
-        JOptionPane.showMessageDialog(null, "Simpan Berhasil");
-        txnama.setText("");
-        txtlp.setText("");
-        tgl.setDate(null);
-        txtisilaporan.setText("");
-        jLabel7.setIcon(null);
-    } catch (Exception e) {
-        e.printStackTrace();
+    String nama = txnama.getText();
+    String telp = txtlp.getText();
+    
+    // Mengambil tanggal dari JDateChooser
+    Date selectedDate = tgl.getDate();
+    if (selectedDate == null) {
+        // Tampilkan pesan kesalahan bahwa tanggal tidak valid
+        JOptionPane.showMessageDialog(null, "Tanggal tidak valid. Harap pilih tanggal yang benar.");
+        return;
     }
+    
+    // Mengonversi tanggal ke format "YYYY-MM-DD"
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    String formattedDate = dateFormat.format(selectedDate);
+    
+    String isiLaporan = txtisilaporan.getText();
+
+    // Mengambil gambar yang dipilih menggunakan JFileChooser
+    byte[] imageBytes = null;
+    if (imagePath != null) {
+        BufferedImage image = ImageIO.read(new File(imagePath));
+        imageBytes = imageToByteArray(image);
+    }
+
+    // Pastikan Anda mengganti 'nama_kolom' dengan nama kolom yang sesuai dalam tabel 'pengaduan'
+    String sql = "INSERT INTO pengaduan (nama, tgl_pengaduan, telp, isi_laporan, foto) VALUES(?,?,?,?,?)";
+
+    // Melakukan PreparedStatement untuk mengganti placeholder dengan data gambar
+    PreparedStatement ps = cn.prepareStatement(sql);
+    
+    // Set parameters for the PreparedStatement
+    ps.setString(1, nama);
+    ps.setString(2, formattedDate);
+    ps.setString(3, telp);
+    ps.setString(4, isiLaporan);
+    
+    // Set the image parameter, handling null if no image is present
+    if (imageBytes != null) {
+        ps.setBytes(5, imageBytes);
+    } else {
+        ps.setNull(5, java.sql.Types.BLOB);
+    }
+
+    // Execute the update
+    ps.executeUpdate();
+    JOptionPane.showMessageDialog(null, "Simpan Berhasil");
+    txnama.setText("");
+    txtlp.setText("");
+    tgl.setDate(null);
+    txtisilaporan.setText("");
+    jLabel7.setIcon(null);
+} catch (Exception e) {
+    e.printStackTrace();
+}
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnsubmitActionPerformed
 

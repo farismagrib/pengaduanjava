@@ -11,6 +11,11 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.util.Date;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.DefaultComboBoxModel;
 /**
  *
  * @author rubyi
@@ -27,24 +32,32 @@ public class FormTanggapan extends javax.swing.JFrame {
     /**
      * Creates new form FormPetugas
      */
-    public FormTanggapan() {
-        initComponents();
-         tabModel = new DefaultTableModel();
-         getDataFromDatabase();// Initialize tabModel here
-    }
+public FormTanggapan() {
+    initComponents();
+    tanggal.setSelectedItem(new Date()); // Inisialisasi dengan tanggal hari ini
+    btnSubmit = new JButton("Submit");
+    judul();
+    tampilData("");
+    tabModel = new DefaultTableModel();
+    getDataFromDatabase(); // Initialize tabModel here
+}
+
 private void getDataFromDatabase() {
     try {
         st = cn.createStatement();
-        ResultSet resultSet = st.executeQuery("SELECT tanggal FROM tanggapan WHERE id_petugas = '1'"); // Gantilah SQL query sesuai dengan kebutuhan Anda
+        ResultSet resultSet = st.executeQuery("SELECT tgl_pengaduan FROM pengaduan WHERE nama = 'hirzi'");
 
-        if (resultSet.next()) {
-            Date date = resultSet.getDate("tanggal");
+        DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>();
 
-            // Format tanggal sesuai kebutuhan Anda
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-            String formattedDate = dateFormat.format(date);
-            tanggal.setDate(date); // tanggal adalah komponen JDateChooser
+        while (resultSet.next()) {
+            Date date = resultSet.getDate("tgl_pengaduan");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String dateString = dateFormat.format(date);
+            comboBoxModel.addElement(dateString);
         }
+
+        // Set model data to JComboBox
+        tanggal.setModel(comboBoxModel);
 
         resultSet.close();
         st.close();
@@ -52,6 +65,9 @@ private void getDataFromDatabase() {
         e.printStackTrace();
     }
 }
+
+
+
 
     
     /**
@@ -70,7 +86,6 @@ private void getDataFromDatabase() {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         id_petugas = new javax.swing.JTextField();
-        tanggal = new com.toedter.calendar.JDateChooser();
         jScrollPane2 = new javax.swing.JScrollPane();
         tanggapan = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -82,6 +97,7 @@ private void getDataFromDatabase() {
         jButton4 = new javax.swing.JButton();
         btnHapus = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
+        tanggal = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -135,8 +151,18 @@ private void getDataFromDatabase() {
         });
 
         jButton3.setText("Logout");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Dashboard");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         btnHapus.setText("HAPUS");
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
@@ -149,6 +175,13 @@ private void getDataFromDatabase() {
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
+            }
+        });
+
+        tanggal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        tanggal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tanggalActionPerformed(evt);
             }
         });
 
@@ -183,12 +216,12 @@ private void getDataFromDatabase() {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnUbah))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tanggal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(id_petugas, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(judul_laporan, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(18, 18, 18)
+                            .addComponent(judul_laporan, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tanggal, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 6, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -248,33 +281,99 @@ private void getDataFromDatabase() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tableTanggapanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableTanggapanMouseClicked
-        // TODO add your handling code here:
+        id_petugas.setText(tableTanggapan.getValueAt(tableTanggapan.getSelectedRow(), 0).toString());
+        judul_laporan.setText(tableTanggapan.getValueAt(tableTanggapan.getSelectedRow(), 1).toString());
+
+        // Mengonversi nilai tanggal dari String ke java.util.Date
+        try {
+            String tanggalString = tableTanggapan.getValueAt(tableTanggapan.getSelectedRow(), 2).toString();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Sesuaikan dengan format tanggal di tabel
+            Date tanggalDate = dateFormat.parse(tanggalString);
+            
+            // Ubah nilai pada JComboBox
+            tanggal.setSelectedItem(tanggalDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        tanggapan.setText(tableTanggapan.getValueAt(tableTanggapan.getSelectedRow(), 3).toString());
+        btnSubmit.setEnabled(false);
+        btnUbah.setEnabled(true);
+        btnHapus.setEnabled(true);
+        id_petugas.setEnabled(false);
+    
     }//GEN-LAST:event_tableTanggapanMouseClicked
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-        // TODO add your handling code here:
-            try {
-        st = cn.createStatement();
+   try {
+    st = cn.createStatement();
+    String idPetugas = id_petugas.getText();
+    String judulLaporan = judul_laporan.getText();
+    String isiTanggapan = tanggapan.getText();
 
-        // Format the date in the expected format (yyyy-MM-dd)
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String formattedDate = dateFormat.format(tanggal.getDate());
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    String selectedDateString = (String) tanggal.getSelectedItem();
 
-        st.executeUpdate("INSERT INTO tanggapan VALUES('" + id_petugas.getText() + "', '"
-                + judul_laporan.getText() + "','" + formattedDate + "','" + tanggapan.getText() + "') ");
-        tampilData("");
-        JOptionPane.showMessageDialog(null, "Simpan Berhasil");
-        id_petugas.setText("");
-        judul_laporan.setText("");
-        tanggal.setDate(null);
-        tanggapan.setText("");
-    } catch (Exception e) {
-        e.printStackTrace();
+    if (selectedDateString != null) {
+        try {
+            Date selectedDate = dateFormat.parse(selectedDateString);
+
+            String formattedDate = dateFormat.format(selectedDate);
+
+            String query = "INSERT INTO tanggapan (id_petugas, judul_laporan, tanggal, tanggapan) VALUES ('" + idPetugas + "', '"
+                    + judulLaporan + "', '" + formattedDate + "', '" + isiTanggapan + "')";
+
+            st.executeUpdate(query);
+            tampilData("");
+            JOptionPane.showMessageDialog(null, "Simpan Berhasil");
+            reset();
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error parsing date. Please select a valid date.");
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Pilih tanggal terlebih dahulu.");
     }
+} catch (SQLException e) {
+    e.printStackTrace();
+}
+
     }//GEN-LAST:event_btnSubmitActionPerformed
 
     private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
-        // TODO add your handling code here:
+ try {
+    st = cn.createStatement();
+    String idPetugas = id_petugas.getText();
+    String judulLaporan = judul_laporan.getText();
+    String isiTanggapan = tanggapan.getText();
+
+    // Menggunakan SimpleDateFormat untuk mengonversi tanggal menjadi format yang sesuai
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    String selectedDate = (String) tanggal.getSelectedItem(); // Mengambil tanggal dari JComboBox sebagai String
+
+    if (selectedDate != null) {
+        String query = "UPDATE tanggapan SET judul_laporan = '" + judulLaporan + "', "
+                + "tanggal = '" + selectedDate + "', tanggapan = '" + isiTanggapan + "' WHERE id_petugas = '" + idPetugas + "'";
+
+        st.executeUpdate(query);
+        JOptionPane.showMessageDialog(null, "Update Berhasil");
+
+        DefaultTableModel model = (DefaultTableModel) tableTanggapan.getModel();
+        int selectedRow = tableTanggapan.getSelectedRow();
+        if (selectedRow != -1) {
+            model.setValueAt(judulLaporan, selectedRow, 1);
+            model.setValueAt(selectedDate, selectedRow, 2);
+            model.setValueAt(isiTanggapan, selectedRow, 3);
+        }
+
+        reset();
+    } else {
+        JOptionPane.showMessageDialog(null, "Pilih tanggal terlebih dahulu.");
+    }
+} catch (SQLException e) {
+    e.printStackTrace();
+}
+
     }//GEN-LAST:event_btnUbahActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
@@ -283,22 +382,46 @@ private void getDataFromDatabase() {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
-        // TODO add your handling code here:
-        try {
+    try {
         int jawab;
-        
-        if((jawab = JOptionPane.showConfirmDialog(null,"Ingin Menghapus Data?", 
-                "konfirmasi", JOptionPane.YES_NO_OPTION))   == 0) {
+
+        if ((jawab = JOptionPane.showConfirmDialog(null, "Ingin Menghapus Data?",
+                "Konfirmasi", JOptionPane.YES_NO_OPTION)) == 0) {
             st = cn.createStatement();
-            st.executeUpdate("DELETE FROM tanggapan WHERE id_petugas='"
-                + tabModel.getValueAt(tableTanggapan.getSelectedRow(), 0) + "'");
-            tampilData("");
-            reset();
+
+            int selectedRow = tableTanggapan.getSelectedRow();
+            if (selectedRow >= 0) {
+                String idPetugas = tabModel.getValueAt(selectedRow, 0).toString();
+                st.executeUpdate("DELETE FROM tanggapan WHERE id_petugas='" + idPetugas + "'");
+                tampilData("");
+                reset();
+            } else {
+                JOptionPane.showMessageDialog(null, "Pilih baris yang ingin dihapus terlebih dahulu.");
+            }
         }
-    } catch (Exception e) {
+    } catch (SQLException e) {
         e.printStackTrace();
-    }  
+    }
+
     }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        Dahboard fl= new Dahboard();
+        fl.show();
+        this.dispose();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        FormLogin fl= new FormLogin();
+        fl.show();
+        this.dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void tanggalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tanggalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tanggalActionPerformed
 
     /**
      * @param args the command line arguments
@@ -343,30 +466,47 @@ private void getDataFromDatabase() {
     tableTanggapan.setModel(tabModel);
 }
 
-    public void tampilData(String where) {
-        try {
-            st = cn.createStatement();
-            tabModel.getDataVector().removeAllElements();
-            tabModel.fireTableDataChanged();
-            rs = st.executeQuery("SELECT * FROM tanggapan " + where);
-            
-            while (rs.next()) {
-                Object[] data = {
-                    rs.getString("id_petugas"),
+  public void tampilData(String where) {
+    try {
+        st = cn.createStatement();
+        tabModel.getDataVector().removeAllElements();
+        tabModel.fireTableDataChanged();
+        
+        // Pastikan query SQL yang benar dengan WHERE clause
+        String query = "SELECT * FROM tanggapan " + where;
+        
+        rs = st.executeQuery(query);
+        
+        while (rs.next()) {
+            Object[] data = {
+                rs.getString("id_petugas"),
                 rs.getString("judul_laporan"),
                 rs.getString("tanggal"),
-                rs.getString("tanggapan"),
-                };
-                tabModel.addRow(data);
+                rs.getString("tanggapan")
+            };
+            tabModel.addRow(data);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            // Pastikan Anda menutup statement dan result set setelah digunakan
+            if (rs != null) {
+                rs.close();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            if (st != null) {
+                st.close();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
+}
+
     public void reset() {
         id_petugas.setText("");
         judul_laporan.setText("");
-        tanggal.setDate(null);
+        tanggal.setSelectedItem(null);
         tanggapan.setText("");
         btnSubmit.setEnabled(true);
         id_petugas.setEnabled(true);
@@ -392,7 +532,7 @@ private void getDataFromDatabase() {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextField judul_laporan;
     private javax.swing.JTable tableTanggapan;
-    private com.toedter.calendar.JDateChooser tanggal;
+    private javax.swing.JComboBox<String> tanggal;
     private javax.swing.JTextArea tanggapan;
     // End of variables declaration//GEN-END:variables
 }
