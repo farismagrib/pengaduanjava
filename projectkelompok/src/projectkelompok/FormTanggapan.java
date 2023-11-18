@@ -382,26 +382,32 @@ private void getDataFromDatabase() {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
-    try {
-        int jawab;
+   try {
+    int jawab;
 
-        if ((jawab = JOptionPane.showConfirmDialog(null, "Ingin Menghapus Data?",
-                "Konfirmasi", JOptionPane.YES_NO_OPTION)) == 0) {
-            st = cn.createStatement();
+    if ((jawab = JOptionPane.showConfirmDialog(null, "Ingin Menghapus Data?",
+            "Konfirmasi", JOptionPane.YES_NO_OPTION)) == 0) {
+        st = cn.createStatement();
 
-            int selectedRow = tableTanggapan.getSelectedRow();
-            if (selectedRow >= 0) {
-                String idPetugas = tabModel.getValueAt(selectedRow, 0).toString();
-                st.executeUpdate("DELETE FROM tanggapan WHERE id_petugas='" + idPetugas + "'");
-                tampilData("");
-                reset();
-            } else {
-                JOptionPane.showMessageDialog(null, "Pilih baris yang ingin dihapus terlebih dahulu.");
-            }
+        int selectedRow = tableTanggapan.getSelectedRow();
+        int columnIndex = 0; // Assuming the ID column is at index 0
+
+        if (selectedRow >= 0 && columnIndex < tabModel.getColumnCount()) {
+            String idPetugas = tabModel.getValueAt(selectedRow, columnIndex).toString();
+            st.executeUpdate("DELETE FROM tanggapan WHERE id_petugas='" + idPetugas + "'");
+            tampilData("");
+            reset();
+        } else {
+            JOptionPane.showMessageDialog(null, "Pilih baris yang ingin dihapus terlebih dahulu.");
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
     }
+} catch (SQLException e) {
+    e.printStackTrace();
+} catch (ArrayIndexOutOfBoundsException ex) {
+    ex.printStackTrace();
+    JOptionPane.showMessageDialog(null, "Error: Unable to access data at the specified indices.");
+}
+
 
     }//GEN-LAST:event_btnHapusActionPerformed
 

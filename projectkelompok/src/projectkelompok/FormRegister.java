@@ -35,14 +35,12 @@ public class FormRegister extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        txNik = new javax.swing.JTextField();
         txNama = new javax.swing.JTextField();
-        txUser = new javax.swing.JTextField();
         txTelp = new javax.swing.JTextField();
         txPass = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
-        txLevel = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -57,12 +55,12 @@ public class FormRegister extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 2, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("nama");
+        jLabel2.setText("nik");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 80, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 2, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("username");
+        jLabel3.setText("nama");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 120, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI Black", 2, 14)); // NOI18N
@@ -74,14 +72,14 @@ public class FormRegister extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("telp");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 200, -1, -1));
-        jPanel1.add(txNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 310, -1));
+        jPanel1.add(txNik, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 310, -1));
 
-        txUser.addActionListener(new java.awt.event.ActionListener() {
+        txNama.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txUserActionPerformed(evt);
+                txNamaActionPerformed(evt);
             }
         });
-        jPanel1.add(txUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 120, 310, -1));
+        jPanel1.add(txNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 120, 310, -1));
         jPanel1.add(txTelp, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 200, 310, -1));
         jPanel1.add(txPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 160, 310, -1));
 
@@ -100,14 +98,6 @@ public class FormRegister extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 310, 90, 50));
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI Black", 2, 14)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("role");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 240, -1, -1));
-
-        txLevel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Masyarakat" }));
-        jPanel1.add(txLevel, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 240, 310, -1));
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/desktop-wallpaper-pemandangan-nordic-pemandangan.jpg"))); // NOI18N
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 530));
@@ -128,46 +118,49 @@ public class FormRegister extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txUserActionPerformed
+    private void txNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txNamaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txUserActionPerformed
+    }//GEN-LAST:event_txNamaActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    Connection kon = koneksi.koneksi();
+  Connection kon = koneksi.koneksi();
 
-        try {
-            Statement st = kon.createStatement();
-            String sql = "SELECT * FROM login where username ='"+txUser.getText()+"'  and password = '"+txPass.getText()+"'  ";
+try {
+    Statement st = kon.createStatement();
 
-            ResultSet rs = st.executeQuery(sql);
+    // Check if the user already exists
+    String checkUserSql = "SELECT * FROM masyarakat WHERE nama='" + txNama.getText() + "'";
+    ResultSet checkUserRs = st.executeQuery(checkUserSql);
 
-            if (rs.next()) {
-                if (rs.getString("level").equals("admin")) {
-                    FormData fa = new FormData();
-                    fa.show();
-                    this.dispose();
-                } else if (rs.getString("level").equals("petugas")) {
-                    FormTanggapan fp = new FormTanggapan();
-                    fp.show();
-                    this.dispose();
-                } else if (rs.getString("level").equals("masyarakat")) {
-                    FormLaporanMasyarakat fm = new FormLaporanMasyarakat();
-                    fm.show();
-                    this.dispose();
-                } 
-            } 
-        } catch (java.sql.SQLException e) {
-            JOptionPane.showMessageDialog(null, e);
-        } 
+    if (checkUserRs.next()) {
+        // User already exists, show a message or handle accordingly
+        JOptionPane.showMessageDialog(null, "Nama already exists. Please choose a different name.");
+    } else {
+        // User doesn't exist, proceed with registration
+        String insertUserSql = "INSERT INTO masyarakat (nama, password, telp) VALUES ('" + txNama.getText() + "', '" + txPass.getText() + "', 'masyarakat')";
+        int rowsAffected = st.executeUpdate(insertUserSql);
+
+        if (rowsAffected > 0) {
+            // Registration successful
+            JOptionPane.showMessageDialog(null, "Registration successful!");
+        } else {
+            // Registration failed
+            JOptionPane.showMessageDialog(null, "Registration failed. Please try again.");
+        }
+    }
+} catch (java.sql.SQLException e) {
+    JOptionPane.showMessageDialog(null, e);
+}
+
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+      txNik.setText("");
       txNama.setText("");
-      txUser.setText("");
       txPass.setText("");
       txTelp.setText("");
-      txUser.requestFocus();
+      txNama.requestFocus();
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -214,13 +207,11 @@ public class FormRegister extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JComboBox<String> txLevel;
     private javax.swing.JTextField txNama;
+    private javax.swing.JTextField txNik;
     private javax.swing.JPasswordField txPass;
     private javax.swing.JTextField txTelp;
-    private javax.swing.JTextField txUser;
     // End of variables declaration//GEN-END:variables
 }

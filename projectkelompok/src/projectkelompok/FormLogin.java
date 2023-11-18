@@ -81,13 +81,13 @@ public class FormLogin extends javax.swing.JFrame {
         jPanel1.add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 230, 85, 45));
 
         btnRegist.setFont(new java.awt.Font("Segoe UI Black", 2, 14)); // NOI18N
-        btnRegist.setText("Register");
+        btnRegist.setText("Login Masyarakat");
         btnRegist.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegistActionPerformed(evt);
             }
         });
-        jPanel1.add(btnRegist, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 230, -1, 45));
+        jPanel1.add(btnRegist, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 230, -1, 45));
 
         btnCancel.setFont(new java.awt.Font("Segoe UI Black", 2, 14)); // NOI18N
         btnCancel.setText("Cancel");
@@ -96,7 +96,7 @@ public class FormLogin extends javax.swing.JFrame {
                 btnCancelActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 230, 85, 46));
+        jPanel1.add(btnCancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 230, 85, 46));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/desktop-wallpaper-pemandangan-nordic-pemandangan.jpg"))); // NOI18N
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, -1));
@@ -137,11 +137,7 @@ public class FormLogin extends javax.swing.JFrame {
                     Dahboard fp = new Dahboard();
                     fp.show();
                     this.dispose();
-                } else if (rs.getString("level").equals("masyarakat")) {
-                    FormLaporanMasyarakat fm = new FormLaporanMasyarakat();
-                    fm.show();
-                    this.dispose();
-                } 
+                }  
             } else {
                 JOptionPane.showMessageDialog(null,"Maaf password atau username anda salah");
                 txUser.setText("");
@@ -162,7 +158,7 @@ public class FormLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnRegistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistActionPerformed
-    FormRegister fl= new FormRegister();
+    LoginMasyarakat fl= new LoginMasyarakat();
         fl.show();
         this.dispose();
         // TODO add your handling code here:
